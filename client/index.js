@@ -2,15 +2,18 @@ let canvas = document.getElementById("ctx")
 let ctx = canvas.getContext("2d")
 let myWidth = 0
 let myHeight = 0
+let myColor = 'Green'
+
+let menu = Menu()
 
 
 canvas.addEventListener('touchstart', dragStart, false)
 canvas.addEventListener('touchend', dragEnd, false)
 canvas.addEventListener('touchmove', drag, false)
 
-canvas.addEventListener('mousedown', dragStart, false)
-canvas.addEventListener('mouseup', dragEnd, false)
-canvas.addEventListener('mousemove', drag, false)
+window.addEventListener('mousedown', dragStart, false)
+window.addEventListener('mouseup', dragEnd, false)
+window.addEventListener('mousemove', drag, false)
 canvas.addEventListener('wheel', zoom, false)
 
 let hexSize = 50
@@ -43,6 +46,10 @@ function draw() {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     drawAllInList(hexSizeScale, HEXAGON_LIST, offSetX, offSetY)
     drawAllInList(hexSizeScale, CROSS_LIST, offSetX, offSetY)
+
+    menu.draw(myWidth, myHeight)
+    ctx.fillStyle = myColor
+    if (dragObject == 1) drawHouse(pX, pY, myWidth / 32)
 }
 
 
@@ -50,7 +57,7 @@ function draw() {
 setInterval(function(){
     update()
     draw()
-},1000/60);
+},1000/100);
 
 let socket = io();
 
@@ -65,6 +72,6 @@ socket.on('newMap',function(data){
 
     for (let i = 0; i < data.crosses.length; i++) {
         let cross = data.crosses[i]
-        //Cross(cross.x, cross.y, 'Green')
+        Cross(cross.x, cross.y)
     }
 });

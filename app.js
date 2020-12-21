@@ -126,12 +126,12 @@ function createCrosses() {
             if (crossArray[a].x == currentHexX - 1 && crossArray[a].y == currentHex.y) left = false
         }
 
-        if (upLeft) crossArray.push({x: currentHexX - 0.5, y: currentHex.y - 1})
-        if (upRight) crossArray.push({x: currentHexX + 0.5, y: currentHex.y - 1})
-        if (right) crossArray.push({x: currentHexX + 1, y: currentHex.y})
-        if (downRight) crossArray.push({x: currentHexX + 0.5, y: currentHex.y + 1})
-        if (downLeft) crossArray.push({x: currentHexX - 0.5, y: currentHex.y + 1})
-        if (left) crossArray.push({x: currentHexX - 1, y: currentHex.y})
+        if (upLeft) crossArray.push({x: currentHexX - 0.5, y: currentHex.y - 1, color: 'GREEN'})
+        if (upRight) crossArray.push({x: currentHexX + 0.5, y: currentHex.y - 1, color: 'GREEN'})
+        if (right) crossArray.push({x: currentHexX + 1, y: currentHex.y, color: 'GREEN'})
+        if (downRight) crossArray.push({x: currentHexX + 0.5, y: currentHex.y + 1, color: 'GREEN'})
+        if (downLeft) crossArray.push({x: currentHexX - 0.5, y: currentHex.y + 1, color: 'GREEN'})
+        if (left) crossArray.push({x: currentHexX - 1, y: currentHex.y, color: 'GREEN'})
 
     }
     return crossArray
