@@ -4,7 +4,7 @@ let myWidth = 0
 let myHeight = 0
 let myColor = 'Green'
 
-let menu = Menu()
+let pMenu = PopUpMenu(4, 2)
 
 
 canvas.addEventListener('touchstart', dragStart, false)
@@ -47,9 +47,7 @@ function draw() {
     drawAllInList(hexSizeScale, HEXAGON_LIST, offSetX, offSetY)
     drawAllInList(hexSizeScale, CROSS_LIST, offSetX, offSetY)
 
-    menu.draw(myWidth, myHeight)
-    ctx.fillStyle = myColor
-    if (dragObject == 1) drawHouse(pX, pY, myWidth / 32)
+    if (crossFocus > -1) pMenu.draw(hexSize, hexSizeScale, crossFocus, offSetX, offSetY)
 }
 
 

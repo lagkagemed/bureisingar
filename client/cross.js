@@ -23,14 +23,16 @@ let Cross = function (x, y) {
     return self
 }
 
-function clickCross(pX, pY, length, type) {
+function clickCross(pX, pY, length) {
+    let focus = -1
     for (let i = 0; i < CROSS_LIST.length; i++) {
         let cross = CROSS_LIST[i]
         let realX = (cross.x * length) * -1
         let realY = (cross.y * length) * -1
         let hsl = length / cross.sideLengthFact / 2
-        if (pX > realX - hsl && pX < realX + hsl && pY > realY - hsl && pY < realY + hsl) cross.type = type
+        if (pX > realX - hsl && pX < realX + hsl && pY > realY - hsl && pY < realY + hsl) focus = i
     }
+    return focus
 }
 
 function drawCrossHitB(realX, realY, sideLength) {         

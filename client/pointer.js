@@ -2,6 +2,8 @@ let offSetX = 0
 let offSetY = 0
 let initX = 0
 let initY = 0
+let startX = 0
+let startY = 0
 let endX = 0
 let endY = 0
 let pX = 0
@@ -9,7 +11,7 @@ let pY = 0
 let relZX = 0
 let relZY = 0
 let dragScreen = false
-let dragObject = 0
+let crossFocus = -1
 
 
 let scale = 1
@@ -21,21 +23,26 @@ function dragStart(e) {
         initY = offSetY - e.touches[0].clientY
         pX = e.touches[0].clientX
         pY = e.touches[0].clientY
-        if (e.touches[0].clientX > myWidth - myWidth / 8) dragScreen = false
+        endX = offSetX - e.touches[0].clientX
+        endY = offSetY - e.touches[0].clientY
+        //if (e.touches[0].clientX > myWidth - myWidth / 8) dragScreen = false
     } else {
         initX = offSetX - e.clientX
         initY = offSetY - e.clientY
         pX = e.clientX
         pY = e.clientY
-        if (e.clientX > myWidth - myWidth / 8) dragScreen = false
+        endX = offSetX - e.clientX
+        endY = offSetY - e.clientY   
+        //if (e.clientX > myWidth - myWidth / 8) dragScreen = false
     }
+    startX = pX
+    startY = pY
     menuDrag(pX, pY)
 }
 
 function dragEnd() {
     dragScreen = false
-    clickCross(endX, endY, hexSizeScale, dragObject)
-    dragObject = 0
+    if (startX == pX && startY == pY) crossFocus = clickCross(endX, endY, hexSizeScale)
 }
 
 function drag(e) {
