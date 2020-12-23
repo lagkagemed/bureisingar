@@ -42,7 +42,7 @@ function dragStart(e) {
 
 function dragEnd() {
     dragScreen = false
-    if (startX == pX && startY == pY) crossFocus = clickCross(endX, endY, hexSizeScale)
+    if (startX == pX && startY == pY) crossFocus = clickCross(crossFocus, endX, endY, hexSize, hexSizeScale)
 }
 
 function drag(e) {

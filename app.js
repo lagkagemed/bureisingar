@@ -19,25 +19,61 @@ app.use('/client',express.static(__dirname + '/client'));
 serv.listen(process.env.PORT || 2000);
 console.log('Server started.');
 
+let SOCKET_LIST = {}
+
 let map = {}
 map.hexagons = createMap(100)
 map.crosses = createCrosses()
 console.log(map)
 
+let playerFName = ['attractive', 'bald', 'beautiful', 'chubby', 'clean', 'dazzling', 'drab', 'elegant', 'fancy', 'fit', 'flabby', 'glamorous', 'gorgeous', 'handsome', 'long', 'magnificent', 'muscular', 'plain', 'plump', 'quaint', 'scruffy', 'shapely', 'short', 'skinny', 'stocky', 'ugly', 'unkempt', 'unsightly']
+let playerBName = ["people","history","way","art","world","information","map","family","government","health","system","computer","meat","year","thanks","music","person","reading","method","data","food","understanding","theory","law","bird","literature","problem","software","control","knowledge","power","ability","economics","love","internet","television","science","library","nature","fact","product","idea","temperature","investment","area","society","activity","story","industry","media","thing","oven","community","definition","safety","quality","development","language","management","player","variety","video","week","security","country","exam","movie","organization","equipment","physics","analysis","policy","series","thought","basis","boyfriend","direction","strategy","technology","army","camera","freedom","paper","environment","child","instance","month","truth","marketing","university","writing","article","department","difference","goal","news","audience","fishing","growth","income","marriage","user","combination","failure","meaning","medicine","philosophy","teacher","communication","night","chemistry","disease","disk","energy","nation","road","role","soup","advertising","location","success","addition","apartment","education","math","moment","painting","politics","attention","decision","event","property","shopping","student","wood","competition","distribution","entertainment","office","population","president"]
+
+let playerColors = ['RED', 'GREEN', 'ORANGE', 'BLUE', 'WHITE', 'PURPLE', 'YELLOW']
+
+function pickRandColor(array) {
+    let pos = (Math.random() * array.length) | 0
+    let rand = array[pos]
+    array.splice(pos, 1)
+    return rand
+}
+
 let io = new Server(serv);
 io.sockets.on('connection', function(socket){
     socket.id = Math.random();
-    socket.name = "Unnamed";
-    //SOCKET_LIST[socket.id] = socket;
-    console.log('socket connection');
+
+    let bName = pickRand(playerBName)
+    bName = bName.charAt(0).toUpperCase() + bName.slice(1)
+    socket.name = pickRand(playerFName) + bName
+
+    socket.color = pickRandColor(playerColors)
+    SOCKET_LIST[socket.id] = socket;
+
+    socket.emit('myInfo', {id: socket.id, name: socket.name, color: socket.color})
+
+    console.log(socket.name + ' connected!');
 
     socket.emit('newMap', map)
 
+    socket.on('buildHouse',function(data){
+        map.crosses[data].type = 1
+        map.crosses[data].color = socket.color
+        sendMapToAll()
+        console.log(socket.name + ' build house on cross ' + data)
+    })
+
     socket.on('disconnect',function(){
-        //delete SOCKET_LIST[socket.id];
+        delete SOCKET_LIST[socket.id];
         console.log('socket disconnected');
     });
 });
+
+function sendMapToAll() {
+    for (let i in SOCKET_LIST) {
+        let socket = SOCKET_LIST[i]
+        socket.emit('newMap', map)
+    }
+}
 
 function pickRand(array) {
     let rand = array[(Math.random() * array.length) | 0]
@@ -126,13 +162,14 @@ function createCrosses() {
             if (crossArray[a].x == currentHexX - 1 && crossArray[a].y == currentHex.y) left = false
         }
 
-        if (upLeft) crossArray.push({x: currentHexX - 0.5, y: currentHex.y - 1, color: 'GREEN'})
-        if (upRight) crossArray.push({x: currentHexX + 0.5, y: currentHex.y - 1, color: 'GREEN'})
-        if (right) crossArray.push({x: currentHexX + 1, y: currentHex.y, color: 'GREEN'})
-        if (downRight) crossArray.push({x: currentHexX + 0.5, y: currentHex.y + 1, color: 'GREEN'})
-        if (downLeft) crossArray.push({x: currentHexX - 0.5, y: currentHex.y + 1, color: 'GREEN'})
-        if (left) crossArray.push({x: currentHexX - 1, y: currentHex.y, color: 'GREEN'})
+        if (upLeft) crossArray.push({x: currentHexX - 0.5, y: currentHex.y - 1, color: 'GREEN', type: 0, color: 'Grey'})
+        if (upRight) crossArray.push({x: currentHexX + 0.5, y: currentHex.y - 1, color: 'GREEN', type: 0, color: 'Grey'})
+        if (right) crossArray.push({x: currentHexX + 1, y: currentHex.y, color: 'GREEN', type: 0, color: 'Grey'})
+        if (downRight) crossArray.push({x: currentHexX + 0.5, y: currentHex.y + 1, color: 'GREEN', type: 0, color: 'Grey'})
+        if (downLeft) crossArray.push({x: currentHexX - 0.5, y: currentHex.y + 1, color: 'GREEN', type: 0, color: 'Grey'})
+        if (left) crossArray.push({x: currentHexX - 1, y: currentHex.y, color: 'GREEN', type: 0, color: 'Grey'})
 
     }
     return crossArray
 }
+

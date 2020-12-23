@@ -48,7 +48,7 @@ let PopUpMenu = function (sizeX, sizeY) {
         ctx.font = (Math.floor(buySizeX / 7)) + 'px Arial'
         ctx.fillStyle = 'Black'
         ctx.textAlign = "center";
-        ctx.fillText('BUY', realX + realSizeX / 2, realY + realSizeY / this.rows * 3)
+        ctx.fillText('BUILD', realX + realSizeX / 2, realY + realSizeY / this.rows * 3)
         
 
     }

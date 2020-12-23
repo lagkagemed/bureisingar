@@ -1,19 +1,19 @@
 let CROSS_LIST = []
 
-let Cross = function (x, y) {
+let Cross = function (x, y, type, color) {
     let self = {
         x: x,
         y: y,
-        color: 'GREEN',
+        color: color,
         sideLengthFact: 2,
         owner: 'none',
-        type: 0
+        type: type
     }
     self.draw = function (length, offX, offY) {
         let realX = (x * length) + offX
         let realY = (y * length) + offY
         let sideLength = length / this.sideLengthFact
-        ctx.fillStyle = myColor
+        ctx.fillStyle = this.color
         //ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
         //if (this.type == 0) drawCrossHitB(realX, realY, sideLength)
         if (this.type == 1) drawHouse(realX, realY, sideLength / 2)
@@ -23,14 +23,28 @@ let Cross = function (x, y) {
     return self
 }
 
-function clickCross(pX, pY, length) {
-    let focus = -1
-    for (let i = 0; i < CROSS_LIST.length; i++) {
-        let cross = CROSS_LIST[i]
-        let realX = (cross.x * length) * -1
-        let realY = (cross.y * length) * -1
-        let hsl = length / cross.sideLengthFact / 2
-        if (pX > realX - hsl && pX < realX + hsl && pY > realY - hsl && pY < realY + hsl) focus = i
+function clickCross(focus, pX, pY, length, scaleLength) {
+    if (focus == -1) {
+        for (let i = 0; i < CROSS_LIST.length; i++) {
+            cross = CROSS_LIST[i]
+            realX = (cross.x * scaleLength) * -1
+            realY = (cross.y * scaleLength) * -1
+            hsl = scaleLength / cross.sideLengthFact / 2
+            if (pX > realX - hsl && pX < realX + hsl && pY > realY - hsl && pY < realY + hsl) focus = i
+        }
+    }
+    if (focus > -1) {
+        cross = CROSS_LIST[focus]
+        realCrossX = (cross.x * scaleLength) * -1
+        realCrossY = (cross.y * scaleLength) * -1
+        realSizeX = pMenu.sizeX * length
+        realSizeY = pMenu.sizeY * length
+        realX = realCrossX - realSizeX / 2
+        realY = realCrossY + realSizeY * 0.3
+        if (pX > realX && pX < realX + realSizeX && pY > realY && pY < realY + realSizeY) {
+            socket.emit('buildHouse', focus)
+            focus = -1
+        }
     }
     return focus
 }

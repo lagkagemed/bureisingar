@@ -2,6 +2,8 @@ let canvas = document.getElementById("ctx")
 let ctx = canvas.getContext("2d")
 let myWidth = 0
 let myHeight = 0
+let myId = 0
+let myName = ''
 let myColor = 'Green'
 
 let pMenu = PopUpMenu(4, 2)
@@ -70,6 +72,12 @@ socket.on('newMap',function(data){
 
     for (let i = 0; i < data.crosses.length; i++) {
         let cross = data.crosses[i]
-        Cross(cross.x, cross.y)
+        Cross(cross.x, cross.y, cross.type, cross.color)
     }
-});
+})
+
+socket.on('myInfo', function(data){
+    myId = data.id
+    myName = data.name
+    myColor = data.color
+})
