@@ -6,6 +6,9 @@ let myId = 0
 let myName = ''
 let myColor = 'Green'
 
+let imgTree = new Image()
+imgTree.src = "./client/img/tree.png"
+
 let pMenu = PopUpMenu(4, 2)
 
 
@@ -41,6 +44,7 @@ function init() {
 
 function update() {
     hexSizeScale = hexSize * scale
+
 }
 
 
@@ -50,6 +54,7 @@ function draw() {
     drawAllInList(hexSizeScale, CROSS_LIST, offSetX, offSetY)
 
     if (crossFocus > -1) pMenu.draw(hexSize, hexSizeScale, crossFocus, offSetX, offSetY)
+    //ctx.drawImage(imgTree, offSetX, offSetY)
 }
 
 
