@@ -5,9 +5,19 @@ let myHeight = 0
 let myId = 0
 let myName = ''
 let myColor = 'Green'
+ctx.imageSmoothingEnabled = false;
+let oldScale = scale
+
+let hexSize = 50
+let hexSizeScale = hexSize * (scale * 1)
+
 
 let imgTree = new Image()
 imgTree.src = "./client/img/tree.png"
+let imgTreeS = new Image()
+imgTree.addEventListener("load", function(){
+    imgTreeS.src = Resize_Nearest_Neighbour(imgTree, hexSize / 10)
+});
 
 let pMenu = PopUpMenu(4, 2)
 
@@ -20,11 +30,6 @@ window.addEventListener('mousedown', dragStart, false)
 window.addEventListener('mouseup', dragEnd, false)
 window.addEventListener('mousemove', drag, false)
 canvas.addEventListener('wheel', zoom, false)
-
-let hexSize = 50
-let hexSizeScale = hexSize * (scale * 1)
-
-let newCross = Cross(0.5, -1, 'RED')
 
 window.onload = function() {
     init()
@@ -45,6 +50,7 @@ function init() {
 function update() {
     hexSizeScale = hexSize * scale
 
+
 }
 
 
@@ -54,7 +60,7 @@ function draw() {
     drawAllInList(hexSizeScale, CROSS_LIST, offSetX, offSetY)
 
     if (crossFocus > -1) pMenu.draw(hexSize, hexSizeScale, crossFocus, offSetX, offSetY)
-    //ctx.drawImage(imgTree, offSetX, offSetY)
+    ctx.drawImage(imgTreeS, offSetX, offSetY)
 }
 
 
