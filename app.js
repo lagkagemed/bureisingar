@@ -47,19 +47,33 @@ io.sockets.on('connection', function(socket){
     socket.name = pickRand(playerFName) + bName
 
     socket.color = pickRandColor(playerColors)
+
+    socket.resources = {tree: 4, clay: 4, stone: 0, sheep: 2, hay: 2}
+
     SOCKET_LIST[socket.id] = socket;
 
-    socket.emit('myInfo', {id: socket.id, name: socket.name, color: socket.color})
+    sendInfo()
+
+    function sendInfo() {
+        socket.emit('myInfo', {id: socket.id, name: socket.name, color: socket.color, resources: socket.resources})
+    }
 
     console.log(socket.name + ' connected!');
 
     socket.emit('newMap', map)
 
     socket.on('buildHouse',function(data){
-        map.crosses[data].type = 1
-        map.crosses[data].color = socket.color
-        sendMapToAll()
-        console.log(socket.name + ' build house on cross ' + data)
+        if (socket.resources.tree > 0 && socket.resources.clay > 0 && socket.resources.hay > 0 && socket.resources.sheep > 0) {
+            map.crosses[data].type = 1
+            map.crosses[data].color = socket.color
+            sendMapToAll()
+            console.log(socket.name + ' build house on cross ' + data)
+            socket.resources.tree -= 1
+            socket.resources.clay -= 1
+            socket.resources.hay -= 1
+            socket.resources.sheep -= 1
+            sendInfo()
+        }
     })
 
     socket.on('disconnect',function(){

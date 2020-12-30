@@ -24,6 +24,18 @@ let Cross = function (x, y, type, color) {
 }
 
 function clickCross(focus, pX, pY, length, scaleLength) {
+    if (focus > -1) {
+        cross = CROSS_LIST[focus]
+        realCrossX = (cross.x * scaleLength) * -1
+        realCrossY = (cross.y * scaleLength) * -1
+        realSizeX = pMenu.sizeX * length
+        realSizeY = pMenu.sizeY * length
+        realX = realCrossX - realSizeX / 2
+        realY = realCrossY + realSizeY * 0.3
+        if (pX < realX || pX > realX + realSizeX || pY < realY || pY > realY + realSizeY) {
+            focus = -1
+        }
+    } 
     if (focus == -1) {
         for (let i = 0; i < CROSS_LIST.length; i++) {
             cross = CROSS_LIST[i]
@@ -44,7 +56,7 @@ function clickCross(focus, pX, pY, length, scaleLength) {
         if (pX > realX && pX < realX + realSizeX && pY > realY && pY < realY + realSizeY) {
             socket.emit('buildHouse', focus)
             focus = -1
-        }
+        } 
     }
     return focus
 }
