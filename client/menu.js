@@ -58,7 +58,10 @@ let PopUpMenu = function (sizeX, sizeY) {
 let TopMenu = function (yFact) {
     let self = {
         yFact: yFact,
-        color: 'lightgrey'
+        color: 'lightgrey',
+        onOffX: 0,
+        onOffY: 0,
+        onOffSize: 0
     }
 
     self.draw = function (width, height) {
@@ -93,8 +96,44 @@ let TopMenu = function (yFact) {
         ctx.drawImage(imgStoneS, resLength * 5, realHeight / 2 - imgStoneS.height / 2)
         ctx.fillText(myResources.stone, resLength * 5 + imgStoneS.width * 1.5, realHeight / 2 + realHeight / 16)
 
+        this.onOffSize = imgTreeS.width
+        this.onOffX = (numbRes - 1) * resLength
+        this.onOffY = realHeight / 2 - this.onOffSize / 2
+        let onOffOn = 0
+        let onOffOff = 0
+        if (!myReady) {
+            ctx.fillStyle = 'green'
+            onOffOn = 0
+            onOffOff = imgTreeS.width
+        } else {
+            ctx.fillStyle = 'red'
+            onOffOn = imgTreeS.width
+            onOffOff = 0
+        }
+        let saveLineWidth = ctx.lineWidth
+        ctx.beginPath()
+        ctx.rect(this.onOffX + onOffOn, this.onOffY, this.onOffSize, this.onOffSize)
+        ctx.closePath()
+        ctx.fill()
+        ctx.stroke()
+
+        ctx.lineWidth = (Math.floor(imgTreeS.width / 5)) 
+        ctx.beginPath()
+        ctx.rect(this.onOffX + onOffOff, this.onOffY, this.onOffSize, this.onOffSize)
+        ctx.closePath()
+        ctx.fill()
+        ctx.stroke()
+        ctx.lineWidth = saveLineWidth
+        
     }
     return self
+}
+
+function clickOnOff(pX, pY, tmooX, tmooY, tmooS) {
+    let tmSize = tmooS * 2
+    if (pX > tmooX && pX < tmooX + tmSize && pY > tmooY && pY < tmooY + tmSize) {
+        myReady = !myReady
+    }
 }
 
 function menuDrag(pX, pY) {

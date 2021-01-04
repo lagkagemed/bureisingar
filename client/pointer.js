@@ -25,7 +25,6 @@ function dragStart(e) {
         pY = e.touches[0].clientY
         endX = offSetX - e.touches[0].clientX
         endY = offSetY - e.touches[0].clientY
-        //if (e.touches[0].clientX > myWidth - myWidth / 8) dragScreen = false
     } else {
         initX = offSetX - e.clientX
         initY = offSetY - e.clientY
@@ -33,8 +32,8 @@ function dragStart(e) {
         pY = e.clientY
         endX = offSetX - e.clientX
         endY = offSetY - e.clientY   
-        //if (e.clientX > myWidth - myWidth / 8) dragScreen = false
     }
+    if (pY < myHeight / tMenu.yFact) dragScreen = false
     startX = pX
     startY = pY
     menuDrag(pX, pY)
@@ -42,7 +41,12 @@ function dragStart(e) {
 
 function dragEnd() {
     dragScreen = false
-    if (startX == pX && startY == pY) crossFocus = clickCross(crossFocus, endX, endY, hexSize, hexSizeScale)
+    if (startX == pX && startY == pY) {
+        if (pY > myHeight / tMenu.yFact) {
+            crossFocus = clickCross(crossFocus, endX, endY, hexSize, hexSizeScale)
+        }
+        clickOnOff(pX, pY, tMenu.onOffX, tMenu.onOffY, tMenu.onOffSize)
+    }
 }
 
 function drag(e) {

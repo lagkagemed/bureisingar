@@ -6,6 +6,7 @@ let myId = 0
 let myName = ''
 let myColor = 'Green'
 let myResources = {tree: 0, clay: 0, stone: 0, sheep: 0, hay: 0}
+let myReady = 'false'
 ctx.imageSmoothingEnabled = false;
 let oldScale = scale
 
